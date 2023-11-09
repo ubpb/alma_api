@@ -66,7 +66,7 @@ Each method expects a URL path to the resource relative to the configured `base_
 
 To set query string parameters, set the `params:` option and provide a Ruby `hash`. To override the `default_format` for an individual request, you can set the `format:` option to `json` or `xml`, depending on your needs. Setting the format to `xml` is preferable for Alma APIs that work with MARCXML data.
 
-To set the body of a `#post` or `#put` request, you can set the `body:` option. If the request format is `json', the `body:` option should contain a valid json string. Otherwise, if the request format is `xml', the option should be a valid XML string.
+To set the body of a `#post` or `#put` request, you can set the `body:` option. If the request format is `json`, the `body:` option should contain a valid json string. Otherwise, if the request format is `xml', the option should be a valid XML string.
 
 In the case of a `json` request, the result of the call is a Ruby `hash`. For `xml`, the result is a `Nokogiri::XML::Document` instance, as this library uses [`nokogiri`](https://github.com/sparklemotion/nokogiri) under the hood for XML processing.
 
