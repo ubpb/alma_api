@@ -1,13 +1,13 @@
-# Alma REST APIs Ruby library
+# Alma REST API Ruby library
 
-This is a simple Ruby library that acts as wrapper for the
+This is a simple Ruby library that acts as a wrapper for the
 [Ex Libris Alma REST APIs](https://developers.exlibrisgroup.com/alma/apis/).
 
-The main purpose of this library is the abstraction of authentication, error handling and parsing of response data.
+The main purpose of this library is to abstract authentication, error handling, and response parsing.
 
-It uses [`faraday`](https://github.com/lostisland/faraday) as the underlying http client, [`nokogiri`](https://github.com/sparklemotion/nokogiri) for XML parsing and [`oj`](https://github.com/ohler55/oj) and [`hashie`](https://github.com/hashie/hashie) for JSON processing.
+It uses [`faraday`](https://github.com/lostisland/faraday) as the underlying http client, [`nokogiri`](https://github.com/sparklemotion/nokogiri) for XML parsing, and [`oj`](https://github.com/ohler55/oj) and [`hashie`](https://github.com/hashie/hashie) for JSON processing.
 
-_Note: This is NOT an offical client. It is developed at the University Library of Paderborn as an Open Source project._
+__Note: This is NOT an official Alma API client. It is developed at the University Library of Paderborn as an open source project.__
 
 ## Installation
 
@@ -36,18 +36,19 @@ configuration = AlmaApi::Configuration.new(
 ```
 
 1. `api_key` Add your Alma API key here.
-2. `base_url` Add the base URL that should be used for each request. Ex Libris provides different API Gateways for different geographic locations. Check [the documentation here](https://developers.exlibrisgroup.com/alma/apis/#calling) for more information. This parameter is optional and defaults to the Alma API Gateway for Europe: `https://api-eu.hosted.exlibrisgroup.com/almaws/v1`
-3. `default_format` The default format that should be used for each request. The client supports `json` and `xml`. The default is `json`.
-4. `language` The language used by Alma for error messages and textual information. By default this is in English (`en`). To change this set this parameter to any 2 letter language code that is supported and activated in Alma (see "Institution Languages" mapping table in Alma).
+2. `base_url` Add the base URL to be used for each request. Ex Libris provides different API gateways for different geographical locations. See [the documentation here](https://developers.exlibrisgroup.com/alma/apis/#calling) for more information. This parameter is optional and defaults to the Alma API Gateway for Europe: `https://api-eu.hosted.exlibrisgroup.com/almaws/v1`.
+3. `default_format` The default format to use for each request. The client supports `json` and `xml`. The default is `json`.
+4. `language` The language used by Alma for error messages and textual information. The default is English (`en`). To change this, set this parameter to any 2-letter language code that is supported and enabled in Alma (see the mapping table "Institution Languages" in Alma).
 
 ### Creating a client
 
-With the confiuration ready, you can create the client.
+With the configuration ready, you can create the client.
+
 ```ruby
 client = AlmaApi::Client.new(configuration)
 ```
 
-As a shortcut you can call `AlmaApi.configure` to get the client instance. Please note that for every call to `AlmaApi.configure` a new `AlmaApi::Client` instance is returned.
+As a shortcut, you can call `AlmaApi.configure` to get the client instance. Note that each call to `AlmaApi.configure` returns a new `AlmaApi::Client` instance.
 
 ```ruby
 client = AlmaApi.configure do |config|
@@ -57,18 +58,17 @@ client = AlmaApi.configure do |config|
   language: "..."
 end
 ```
-
 ### Using the client
 
-The client provides the following methods: `#get`, `#post`, `#put`, and `#delete` to call the Alma APIs with the corresponding HTTP methods `GET`, `POST`, `PUT` and `DELETE`.
+The client provides the following methods: `#get`, `#post`, `#put` and `#delete` to call the Alma APIs with the corresponding HTTP methods `GET`, `POST`, `PUT` and `DELETE`.
 
 Each method expects a URL path to the resource relative to the configured `base_url` as it's first parameter. Parameters that the Alma API expects as part of the URL path must be included here.
 
-To set querystring parameters, set the `params:` option and provide a Ruby `Hash`. To override the `default_format` for a single request you can set the `format:` option to `json` or `xml` depending on your needs. Setting the format to `xml` is preferable for Alma APIs that work with MARCXML data.
+To set query string parameters, set the `params:` option and provide a Ruby `hash`. To override the `default_format` for an individual request, you can set the `format:` option to `json` or `xml`, depending on your needs. Setting the format to `xml` is preferable for Alma APIs that work with MARCXML data.
 
-To set the body of a `#post` or `#put` request, you can set the `body:` option. If the request format is `json` the `body:` option should contain a valid json string. Otherwise, if the request format is `xml` the option should be a valid XML string.
+To set the body of a `#post` or `#put` request, you can set the `body:` option. If the request format is `json', the `body:` option should contain a valid json string. Otherwise, if the request format is `xml', the option should be a valid XML string.
 
-In case of a `json` request the result of a call is a Ruby `Hash`. For `xml` the result is a `Nokogiri::XML::Document` instance as this library uses [`nokogiri`](https://github.com/sparklemotion/nokogiri) under the hood for XML processing.
+In the case of a `json` request, the result of the call is a Ruby `hash`. For `xml`, the result is a `Nokogiri::XML::Document` instance, as this library uses [`nokogiri`](https://github.com/sparklemotion/nokogiri) under the hood for XML processing.
 
 ## Examples
 
@@ -135,27 +135,29 @@ client.delete("users/#{user_id}") # user_id is a URL parameter
 
 ## Error handling
 
-There a three types of errors that may occur when calling the Alma APIs with this library. Each error exposes `#code` and `#message` methods for further inspection.
+There are three types of errors that can occur when calling the Alma APIs with this library. Each error exposes the `#message' and `#code' methods for further inspection. The message is returned in the language set in the configuration (default is English).
 
-### `AlmaApi::GatewayError`
+For gateway errors, the code is a string token (e.g. REQUEST_TOO_LARGE). For logical errors, the code is usually a number (e.g. 401850). See the "Possible Error Codes" section for each resource in the [documentation](https://developers.exlibrisgroup.com/alma/apis/) for details.
 
-If the Alma API responds with a `4xx` or `5xx` HTTP status AND with one of the following error codes, an `AlmaApi::GatewayError` is raised.
+### 1. `AlmaApi::GatewayError`
+
+If the Alma API responds with a `4xx` OR `5xx` HTTP status AND one of the following error codes, an `AlmaApi::GatewayError` is thrown.
 
 `GENERAL_ERROR`, `UNAUTHORIZED`, `INVALID_REQUEST`, `PER_SECOND_THRESHOLD`, `DAILY_THRESHOLD`, `REQUEST_TOO_LARGE`, `FORBIDDEN`, `ROUTING_ERROR`
 
 Check the [the documentation here](https://developers.exlibrisgroup.com/alma/apis/#error) for more information about gateway errors.
 
-### `AlmaApi::ServerError`
+### 2. `AlmaApi::ServerError`
 
-Every `5xx` HTTP status that not result in an `AlmaApi::GatewayError` will be raised as an `AlmaApi::ServerError`.
+Any `5xx` HTTP status that does not result in an `AlmaApi::GatewayError` will be thrown as an `AlmaApi::ServerError`.
 
-### `AlmaApi::LogicalError`
+### 3. `AlmaApi::LogicalError`
 
-Every `4xx` HTTP status that not result in an `AlmaApi::GatewayError` will be raised as an `AlmaApi::LogicalError`.
+Any `4xx` HTTP status that does not result in an `AlmaApi::GatewayError` will be thrown as an `AlmaApi::LogicalError`.
 
-This is the must common error you will be dealing with and can be used to handle control flow in your application.
+This is the most common error you will encounter and can be used to manage the control flow in your application.
 
-For example, if you load details of a user you don't want your application to blow up in case a user with the given user ID does't exists. Instead you can handle the error like so
+For example, if you're loading a user's details, you don't want your application to blow up if a user with the specified user ID doesn't exist. Instead, you can handle the error like this:
 
 ```ruby
 def load_user(user_id)
@@ -177,6 +179,3 @@ else
 end
 
 ```
-
-
-
