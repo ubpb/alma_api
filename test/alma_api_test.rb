@@ -1,6 +1,6 @@
 require "test_helper"
 
-class TestAlmaApi < Minitest::Test
+class AlmaApiTest < Minitest::Test
 
   def test_configure
     client = AlmaApi.configure do |config|

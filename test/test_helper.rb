@@ -1,7 +1,10 @@
-require "minitest/autorun"
 require "simplecov"
+SimpleCov.start do
+  add_filter "/test/"
+end
+
+require "minitest/autorun"
 require "webmock/minitest"
 require "debug"
 
-SimpleCov.start
 require "alma_api"

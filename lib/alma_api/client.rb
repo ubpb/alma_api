@@ -83,7 +83,9 @@ module AlmaApi
         when 500..599
           raise ServerError.new(error[:error_message], error[:error_code])
         else # this should not happen
+          # :nocov:
           raise ServerError.new(error[:error_message], error[:error_code])
+          # :nocov:
         end
       end
     end
