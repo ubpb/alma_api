@@ -135,7 +135,7 @@ client.delete("users/#{user_id}") # user_id is a URL parameter
 
 ## Error handling
 
-There are three types of errors that can occur when calling the Alma APIs with this library. Each error exposes the `#message' and `#code' methods for further inspection. The message is returned in the language set in the configuration (default is English).
+There are three types of errors that can occur when calling the Alma APIs with this library. Each error exposes the `#message` and `#code` methods for further inspection. The message is returned in the language set in the configuration (default is English).
 
 For gateway errors, the code is a string token (e.g. REQUEST_TOO_LARGE). For logical errors, the code is usually a number (e.g. 401850). See the "Possible Error Codes" section for each resource in the [documentation](https://developers.exlibrisgroup.com/alma/apis/) for details.
 
