@@ -45,7 +45,7 @@ module AlmaApi
     end
 
     def validate_format!(format)
-      case format = format.presence&.to_s&.downcase
+      case format = format&.to_s
       when "json", "xml" then format
       when nil then nil
       else

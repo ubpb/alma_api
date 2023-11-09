@@ -3,3 +3,4 @@
 .env
 .ruby-version
 .DS_Store
+/coverage

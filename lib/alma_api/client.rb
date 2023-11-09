@@ -11,16 +11,13 @@ module AlmaApi
 
     def get(url, params: {}, format: nil)
       perform_request do
-        connection(format).get(url) do |req|
-          req.params = params
-        end
+        connection(format: format, params: params).get(url)
       end
     end
 
     def post(url, params: {}, body: nil, format: nil)
       perform_request do
-        connection(format).post(url) do |req|
-          req.params = params
+        connection(format: format, params: params).post(url) do |req|
           req.body = body
         end
       end
@@ -28,8 +25,7 @@ module AlmaApi
 
     def put(url, params: {}, body: nil, format: nil)
       perform_request do
-        connection(format).put(url) do |req|
-          req.params = params
+        connection(format: format, params: params).put(url) do |req|
           req.body = body
         end
       end
@@ -37,15 +33,13 @@ module AlmaApi
 
     def delete(url, params: {}, format: nil)
       perform_request do
-        connection(format).delete(url) do |req|
-          req.params = params
-        end
+        connection(format: format, params: params).delete(url)
       end
     end
 
   private
 
-    def connection(format=nil)
+    def connection(format: nil, params: {})
       format = case AlmaApi.validate_format!(format)
                when "xml"  then "application/xml"
                when "json" then "application/json"
@@ -53,15 +47,19 @@ module AlmaApi
                  "application/json"
                end
 
+      default_params = {
+        lang: configuration.language
+      }.reject do |k, v|
+        k == :lang && (v.blank? || v == "en")
+      end
+
       Faraday.new(
         configuration.base_url,
-        params:  {
-          lang: configuration.language
-        },
+        params:  default_params.reverse_merge(params),
         headers: {
-          "authorization": "apikey #{configuration.api_key}",
-          "accept":        format,
-          "content-type":  format
+          "Authorization": "apikey #{configuration.api_key}",
+          "Accept":        format,
+          "Content-Type":  format
         }
       ) do |faraday|
         faraday.response :raise_error # raise Faraday::Error on status code 4xx or 5xx

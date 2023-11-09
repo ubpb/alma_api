@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     alma_api (1.0.0)
-      activesupport (> 6)
+      activesupport (> 6, < 8)
       faraday (~> 2.7)
       hashie (~> 5.0)
       nokogiri (~> 1.11)
@@ -21,14 +21,19 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.4)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
+    crack (0.4.5)
+      rexml
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    docile (1.4.0)
     drb (2.2.0)
       ruby2_keywords
     faraday (2.7.11)
@@ -36,6 +41,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    hashdiff (1.0.1)
     hashie (5.0.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -56,6 +62,7 @@ GEM
       racc
     psych (5.1.1.1)
       stringio
+    public_suffix (5.0.3)
     racc (1.7.3)
     rainbow (3.1.1)
     rdoc (6.6.0)
@@ -79,10 +86,20 @@ GEM
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     stringio (3.0.9)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    webmock (3.19.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
   arm64-darwin-22
@@ -91,6 +108,8 @@ DEPENDENCIES
   alma_api!
   debug
   rubocop
+  simplecov
+  webmock
 
 BUNDLED WITH
    2.4.13
