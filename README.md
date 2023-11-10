@@ -2,8 +2,8 @@
 
 ![Tests](https://github.com/ubpb/alma_api/actions/workflows/tests.yml/badge.svg)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fa479e542383d985dd13/test_coverage)](https://codeclimate.com/github/ubpb/alma_api/test_coverage)
-[![Gem Version](https://badge.fury.io/rb/alma_api.svg)](https://badge.fury.io/rb/alma_api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa479e542383d985dd13/maintainability)](https://codeclimate.com/github/ubpb/alma_api/maintainability)
+[![Gem Version](https://badge.fury.io/rb/alma_api.svg)](https://badge.fury.io/rb/alma_api)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This is a simple Ruby library that acts as a wrapper for the
