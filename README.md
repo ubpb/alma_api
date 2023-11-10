@@ -1,4 +1,4 @@
-# Alma REST API Ruby library
+# Alma REST API Ruby library ![Tests](https://github.com/ubpb/alma_api/actions/workflows/run_tests.yml/badge.svg)
 
 This is a simple Ruby library that acts as a wrapper for the
 [Ex Libris Alma REST APIs](https://developers.exlibrisgroup.com/alma/apis/).
