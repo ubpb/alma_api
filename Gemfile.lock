@@ -110,6 +110,7 @@ PLATFORMS
 
 DEPENDENCIES
   alma_api!
+  bundler
   debug
   minitest
   rake
