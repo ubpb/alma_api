@@ -8,5 +8,6 @@ group :development, :test do
   gem "rake"
   gem "rubocop", require: false
   gem "simplecov", require: false
+  gem "simplecov_json_formatter", require: false
   gem "webmock"
 end

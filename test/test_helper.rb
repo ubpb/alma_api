@@ -1,4 +1,5 @@
 require "simplecov"
+require "simplecov_json_formatter"
 SimpleCov.start do
   add_filter "/test/"
 end

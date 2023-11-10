@@ -116,6 +116,7 @@ DEPENDENCIES
   rake
   rubocop
   simplecov
+  simplecov_json_formatter
   webmock
 
 BUNDLED WITH
