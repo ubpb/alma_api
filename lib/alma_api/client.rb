@@ -71,21 +71,21 @@ module AlmaApi
       set_remaining_api_calls(response)
       parse_response_body(response.body)
     rescue Faraday::Error => e
-      error = parse_error_response_body(e.response[:body])
+      handle_faraday_error(e)
+    end
 
-      case error[:error_code]
+    def handle_faraday_error(error)
+      error_response = parse_error_response_body(error.response[:body])
+
+      case error_response[:error_code]
       when *GATEWAY_ERROR_CODES
-        raise GatewayError.new(error[:error_message], error[:error_code])
+        raise GatewayError.new(error_response[:error_message], error_response[:error_code])
       else
-        case e.response[:status]
+        case error.response[:status]
         when 400..499
-          raise LogicalError.new(error[:error_message], error[:error_code])
-        when 500..599
-          raise ServerError.new(error[:error_message], error[:error_code])
-        else # this should not happen
-          # :nocov:
-          raise ServerError.new(error[:error_message], error[:error_code])
-          # :nocov:
+          raise LogicalError.new(error_response[:error_message], error_response[:error_code])
+        else
+          raise ServerError.new(error_response[:error_message], error_response[:error_code])
         end
       end
     end
