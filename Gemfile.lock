@@ -67,6 +67,7 @@ GEM
     public_suffix (5.0.3)
     racc (1.7.3)
     rainbow (3.1.1)
+    rake (13.1.0)
     rdoc (6.6.0)
       psych (>= 4.0.0)
     regexp_parser (2.8.2)
@@ -110,6 +111,8 @@ PLATFORMS
 DEPENDENCIES
   alma_api!
   debug
+  minitest
+  rake
   rubocop
   simplecov
   webmock
