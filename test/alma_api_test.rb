@@ -20,9 +20,9 @@ class AlmaApiTest < Minitest::Test
     assert_equal "json", AlmaApi.validate_format!("json")
     assert_equal "xml", AlmaApi.validate_format!("xml")
     assert_nil AlmaApi.validate_format!(nil)
+    assert_nil AlmaApi.validate_format!("")
 
     assert_raises(ArgumentError) { AlmaApi.validate_format!("unsupported") }
-    assert_raises(ArgumentError) { AlmaApi.validate_format!("") }
   end
 
 end

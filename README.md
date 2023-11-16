@@ -41,10 +41,25 @@ configuration = AlmaApi::Configuration.new(
 )
 ```
 
-1. `api_key` Add your Alma API key here.
-2. `base_url` Add the base URL to be used for each request. Ex Libris provides different API gateways for different geographical locations. See [the documentation here](https://developers.exlibrisgroup.com/alma/apis/#calling) for more information. This parameter is optional and defaults to the Alma API Gateway for Europe: `https://api-eu.hosted.exlibrisgroup.com/almaws/v1`.
-3. `default_format` The default format to use for each request. The client supports `json` and `xml`. The default is `json`.
-4. `language` The language used by Alma for error messages and textual information. The default is English (`en`). To change this, set this parameter to any 2-letter language code that is supported and enabled in Alma (see the mapping table "Institution Languages" in Alma).
+1. `api_key`
+    Add your Alma API key here.
+2. `base_url`
+    Add the base URL to be used for each request. Ex Libris provides different API gateways for different geographical locations. See [the documentation here](https://developers.exlibrisgroup.com/alma/apis/#calling) for more information. This parameter is optional and defaults to the Alma API Gateway for Europe: `https://api-eu.hosted.exlibrisgroup.com/almaws/v1`.
+
+    You can use a `Symbol` as a shortcut to set the `base_url` for one of the preconfigured gateways `:na` (North America), `:eu` (Europe), `:ap` (Asia-Pacific), `:ca` (Canada), `:cn` (China).
+
+    For example, to set the `base_url` for the canadian gateway, use
+
+    ```ruby
+      configuration = AlmaApi::Configuration.new(
+        base_url: :ca,
+        ...
+      )
+    ```
+3. `default_format`
+    The default format to use for each request. The client supports `json` and `xml`. The default is `json`.
+4. `language`
+    The language used by Alma for error messages and textual information. The default is English (`en`). To change this, set this parameter to any 2-letter language code that is supported and enabled in Alma (see the mapping table "Institution Languages" in Alma).
 
 ### Creating a client
 
