@@ -73,10 +73,10 @@ As a shortcut, you can call `AlmaApi.configure` to get the client instance. Note
 
 ```ruby
 client = AlmaApi.configure do |config|
-  config.api_key: "..."
-  config.base_url: "..."
-  config.default_format: "..."
-  config.language: "..."
+  config.api_key = "..."
+  config.base_url = "..."
+  config.default_format = "..."
+  config.language = "..."
 end
 ```
 ### Using the client
