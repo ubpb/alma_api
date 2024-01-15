@@ -228,6 +228,12 @@ module AlmaApi
       assert_equal({error_message: nil, error_code: nil}, @client.send(:parse_error_response_body, "unsupported"))
     end
 
+    def test_handle_faraday_error_with_missing_response
+      assert_raises(AlmaApi::ServerError) {
+        assert_equal(true, @client.send(:handle_faraday_error, Faraday::Error.new))
+      }
+    end
+
     def test_is_xml_response
       assert_equal(true, @client.send(:is_xml_response?, "<foo>bar</foo>"))
     end

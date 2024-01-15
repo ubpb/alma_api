@@ -75,13 +75,13 @@ module AlmaApi
     end
 
     def handle_faraday_error(error)
-      error_response = parse_error_response_body(error.response[:body])
+      error_response = parse_error_response_body(error.response_body)
 
       case error_response[:error_code]
       when *GATEWAY_ERROR_CODES
         raise GatewayError.new(error_response[:error_message], error_response[:error_code])
       else
-        case error.response[:status]
+        case error.response_status
         when 400..499
           raise LogicalError.new(error_response[:error_message], error_response[:error_code])
         else
