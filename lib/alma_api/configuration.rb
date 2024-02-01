@@ -9,6 +9,7 @@ module AlmaApi
       cn: "https://api-cn.hosted.exlibrisgroup.cn/almaws/v1"   # China
     }.freeze
 
+    DEFAULT_GATEWAY  = GATEWAYS[:eu].freeze
     DEFAULT_FORMAT   = "json".freeze
     DEFAULT_LANGUAGE = "en".freeze
 
@@ -17,11 +18,15 @@ module AlmaApi
                 :default_format,
                 :language
 
-    def initialize(api_key: nil, base_url: nil, default_format: nil, language: nil)
+    def initialize(api_key: nil)
+      # Set defaults. Passing nil to the setters will set the default value.
       self.api_key = api_key
-      self.base_url = base_url
-      self.default_format = default_format
-      self.language = language
+      self.base_url = nil
+      self.default_format = nil
+      self.language = nil
+
+      # Yield self to allow block-style configuration.
+      yield(self) if block_given?
     end
 
     def api_key=(value)
@@ -33,8 +38,10 @@ module AlmaApi
         raise ArgumentError, "Invalid gateway: #{value}" unless GATEWAYS.keys.include?(value)
 
         @base_url = GATEWAYS[value]
+      elsif value.is_a?(String)
+        @base_url = value.presence || DEFAULT_GATEWAY
       else
-        @base_url = value.presence || GATEWAYS[:eu]
+        @base_url = DEFAULT_GATEWAY
       end
     end
 
@@ -43,7 +50,7 @@ module AlmaApi
     end
 
     def language=(value)
-      @language = value.presence || DEFAULT_LANGUAGE
+      @language = value.presence&.to_s || DEFAULT_LANGUAGE
     end
 
   end
