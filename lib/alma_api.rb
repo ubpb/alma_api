@@ -41,9 +41,10 @@ module AlmaApi
   class << self
 
     def configure
-      configuration = Configuration.new
-      yield(configuration) if block_given?
-      Client.new(configuration)
+      warn "[DEPRECATION] `AlmaApi.configure` is deprecated. Please use `AlmaApi::Client.configure` instead."
+      client = Client.configure
+      yield(client.configuration) if block_given?
+      client
     end
 
     def validate_format!(format)

@@ -1,5 +1,12 @@
 module AlmaApi
   class Client
+    class << self
+      def configure
+        configuration = Configuration.new
+        yield(configuration) if block_given?
+        new(configuration)
+      end
+    end
 
     attr_reader :configuration,
                 :remaining_api_calls
