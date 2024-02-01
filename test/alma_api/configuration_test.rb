@@ -12,6 +12,14 @@ module AlmaApi
       assert_equal "en", config.language
     end
 
+    def test_initialize_with_block
+      config = AlmaApi::Configuration.new do |c|
+        c.api_key = "1234"
+      end
+
+      assert_equal "1234", config.api_key
+    end
+
     def test_api_key_setter
       config = AlmaApi::Configuration.new
 
@@ -48,7 +56,7 @@ module AlmaApi
       assert_equal "https://api-eu.hosted.exlibrisgroup.com/almaws/v1", config.base_url
     end
 
-    def test_default_format_setter
+    def test_format_setter
       config = AlmaApi::Configuration.new
 
       config.default_format = "xml"
@@ -66,6 +74,16 @@ module AlmaApi
       assert_raises(ArgumentError) { config.default_format = "unsupported" }
     end
 
+    def test_format_setter_with_symbol
+      config = AlmaApi::Configuration.new
+
+      config.default_format = :xml
+      assert_equal "xml", config.default_format
+
+      config.default_format = :json
+      assert_equal "json", config.default_format
+    end
+
     def test_language_setter
       config = AlmaApi::Configuration.new
 
@@ -79,5 +97,11 @@ module AlmaApi
       assert_equal "en", config.language
     end
 
+    def test_language_setter_with_symbol
+      config = AlmaApi::Configuration.new
+
+      config.language = :de
+      assert_equal "de", config.language
+    end
   end
 end

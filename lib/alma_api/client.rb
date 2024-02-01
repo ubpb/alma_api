@@ -99,30 +99,28 @@ module AlmaApi
     rescue Faraday::Error => e
       handle_faraday_error(e)
     rescue StandardError
-      raise Error, UNEXPECTED_ERROR_MESSAGE
+      raise Error, GENERAL_ERROR_MESSAGE
     end
 
     def handle_faraday_error(error)
-      raise Error, UNEXPECTED_ERROR_MESSAGE if error.response_body.blank?
-
       # The error response body is either XML, JSON or empty, so we need to parse it
-      error_response = parse_error_response_body(error.response_body)
+      error_message, error_code = parse_error_response_body(error.response_body)
 
-      # Throw our own error based on the error code from the response and/or the
-      # response status.
-      case error_response[:error_code]
-      when *GATEWAY_ERROR_CODES
-        raise GatewayError.new(error_response[:error_message], error_response[:error_code])
-      else
+      if error_message.present? && error_code.present?
+        # Raise a gateway error if the error code is one of the gateway error codes
+        raise GatewayError.new(error_message, error_code) if GATEWAY_ERROR_CODES.include?(error_code)
+
+        # Check the response status code
         case error.response_status
         when 400..499
-          raise LogicalError.new(error_response[:error_message], error_response[:error_code])
+          raise LogicalError.new(error_message, error_code)
         when 500..599
-          raise ServerError.new(error_response[:error_message], error_response[:error_code])
-        else
-          raise Error, UNEXPECTED_ERROR_MESSAGE
+          raise ServerError.new(error_message, error_code)
         end
       end
+
+      # If we get here, then we don't know what the error is, so we raise a generic error.
+      raise Error, GENERAL_ERROR_MESSAGE
     end
 
     def set_remaining_api_calls(response)
@@ -143,12 +141,13 @@ module AlmaApi
     end
 
     def parse_error_response_body(body)
+      error_message = nil
+      error_code = nil
+
       if is_xml_response?(body)
         xml = Nokogiri::XML.parse(body)
-        error_message = xml.at("errorMessage")&.text
-        error_code    = xml.at("errorCode")&.text
-
-        {error_message: error_message, error_code: error_code}
+        error_message = xml.at("errorMessage")&.text&.presence
+        error_code    = xml.at("errorCode")&.text&.presence&.upcase
       elsif is_json_response?(body)
         json = Oj.load(body)
         json.extend Hashie::Extensions::DeepFind
@@ -158,13 +157,11 @@ module AlmaApi
         # and sometimes the format is:
         #   {"web_service_result":{"errorList":{"error":{"errorMessage":"xxx","errorCode":"xxx"}}}}
         # so we use a deep find to find the first occurrence of "errorMessage" and "errorCode"
-        error_message = json.deep_find("errorMessage")
-        error_code    = json.deep_find("errorCode")
-
-        {error_message: error_message, error_code: error_code}
-      else
-        {error_message: nil, error_code: nil}
+        error_message = json.deep_find("errorMessage")&.presence
+        error_code    = json.deep_find("errorCode")&.presence
       end
+
+      [error_message, error_code]
     end
 
     def is_xml_response?(body)

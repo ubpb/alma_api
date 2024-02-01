@@ -25,7 +25,7 @@ module AlmaApi
   class ServerError  < Error; end
   class LogicalError < Error; end
 
-  UNEXPECTED_ERROR_MESSAGE = "Unexpected error while performing request. Check #cause for more details.".freeze
+  GENERAL_ERROR_MESSAGE = "Error occured while performing request. Check #cause for more details.".freeze
 
   GATEWAY_ERROR_CODES = [
     "GENERAL_ERROR",

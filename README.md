@@ -180,7 +180,7 @@ There are four types of errors that can occur when calling the Alma APIs with th
 
 ### 1. `AlmaApi::Error`
 
-This is the base error class for this library. All Ruby `StandardError`s raised within this library during a request will result in an `AlmaApi::Error` or in one of the more specific sub classes listed below.
+This is the base error class for this library. All errors raised within this library during a request will result in an `AlmaApi::Error` or in one of the more specific sub classes listed below.
 
 This error is also raised if something goes wrong when opening the connection, on SSL errors, network timeouts, etc.
 
@@ -237,4 +237,4 @@ end
 ### From 1.x to 2.x
 
 * `AlmaApi.configure` is deprecated. Use `AlmaApi::Client.configure` instead.
-* All Ruby `StandardError`s that get raised during a request result in an `AlmaApi::Error`. Use `#cause` to get the causing error.
+* All errors that get raised during a request result in an `AlmaApi::Error`. Use `#cause` to get the causing error.
