@@ -309,5 +309,22 @@ module AlmaApi
       assert_nil(connection.params[:password])
     end
 
+    def test_remaining_api_calls
+      stub_request(
+        :any,
+        "https://api-eu.hosted.exlibrisgroup.com/users/operation/test"
+      ).to_return(
+        status:  200,
+        headers: {"x-exl-api-remaining": "42"}
+      )
+
+      assert_equal(42, @client.remaining_api_calls)
+
+      # Force a StandardError to be raised
+      @client.stub(:connection, nil) do
+        assert_equal(-1, @client.remaining_api_calls)
+      end
+    end
+
   end
 end

@@ -8,8 +8,7 @@ module AlmaApi
       end
     end
 
-    attr_reader :configuration,
-                :remaining_api_calls
+    attr_reader :configuration
 
     def initialize(configuration)
       @configuration = configuration
@@ -42,6 +41,14 @@ module AlmaApi
       perform_request do
         connection(format: format, params: params).delete(url)
       end
+    end
+
+    def remaining_api_calls
+      response = connection.get("users/operation/test")
+      rac = response.headers["x-exl-api-remaining"]
+      rac.present? ? rac.to_i : -1
+    rescue StandardError
+      -1
     end
 
   private
@@ -94,7 +101,6 @@ module AlmaApi
 
     def perform_request
       response = yield
-      set_remaining_api_calls(response)
       parse_response_body(response.body)
     rescue Faraday::Error => e
       handle_faraday_error(e)
@@ -121,11 +127,6 @@ module AlmaApi
 
       # If we get here, then we don't know what the error is, so we raise a generic error.
       raise Error, GENERAL_ERROR_MESSAGE
-    end
-
-    def set_remaining_api_calls(response)
-      rac = response.headers[:x_alma_api_remaining]
-      @remaining_api_calls = rac.to_i if rac.present?
     end
 
     def parse_response_body(body)

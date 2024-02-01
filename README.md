@@ -101,6 +101,8 @@ end
 ```
 ### Using the client
 
+#### Calling Alma
+
 The client provides the following methods: `#get`, `#post`, `#put` and `#delete` to call the Alma APIs with the corresponding HTTP methods `GET`, `POST`, `PUT` and `DELETE`.
 
 Each method expects a URL path to the resource relative to the configured `base_url` as it's first parameter. Parameters that the Alma API expects as part of the URL path must be included here.
@@ -110,6 +112,10 @@ To set query string parameters, set the `params:` option and provide a Ruby `has
 To set the body of a `#post` or `#put` request, you can set the `body:` option. If the request format is `"json"`, the `body:` option should contain a valid json string. Otherwise, if the request format is `"xml"`, the option should be a valid XML string.
 
 In the case of a JSON request, the result of the call is a Ruby `hash`. For a XML request, the result is a `Nokogiri::XML::Document` instance, as this library uses [`nokogiri`](https://github.com/sparklemotion/nokogiri) under the hood for XML processing.
+
+#### Get remaining API calls
+
+Alma reports the number of remaining API calls as part of the response. You can call `#remaining_api_calls` on the client to get this number. In case of an error this simply returns `-1`.
 
 ## Examples
 
@@ -238,3 +244,4 @@ end
 
 * `AlmaApi.configure` is deprecated. Use `AlmaApi::Client.configure` instead.
 * All errors that get raised during a request result in an `AlmaApi::Error`. Use `#cause` to get the causing error.
+* `AlmaApi::Client#remaining_api_calls` performs a request to read the value from Alma.
