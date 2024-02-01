@@ -15,7 +15,7 @@ module AlmaApi
   class Error < StandardError
     attr_reader :code
 
-    def initialize(message, code)
+    def initialize(message=nil, code=nil)
       @code = code.presence || DEFAULT_ERROR_CODE
       super(message.presence || DEFAULT_ERROR_MESSAGE)
     end
