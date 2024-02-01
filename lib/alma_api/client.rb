@@ -40,6 +40,8 @@ module AlmaApi
   private
 
     def connection(format: nil, params: {})
+      # The format parameter is used to specify the format of the request.
+      # Alma supports both JSON and XML, but the default is JSON.
       format = case AlmaApi.validate_format!(format)
                when "xml"  then "application/xml"
                when "json" then "application/json"
@@ -47,12 +49,15 @@ module AlmaApi
                  "application/json"
                end
 
+      # Setup default parameters. For now just the language.
+      # If the language is not specified, then the default language is English.
       default_params = {
         lang: configuration.language
       }.reject do |k, v|
         k == :lang && (v.blank? || v == "en")
       end
 
+      # Finally create and return the Faraday connection object.
       Faraday.new(
         configuration.base_url,
         params:  default_params.reverse_merge(params),
