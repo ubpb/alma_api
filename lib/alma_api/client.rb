@@ -57,15 +57,29 @@ module AlmaApi
         k == :lang && (v.blank? || v == "en")
       end
 
+      # Merge the default parameters with the parameters passed in.
+      params = default_params.reverse_merge(params)
+
+      # Setup the headers for the request.
+      headers = {
+        "Authorization": "apikey #{configuration.api_key}",
+        "Accept":        format,
+        "Content-Type":  format
+      }
+
+      # If the params contains a password parameter, delete that from the params
+      # and add it to the headers. This is a special case for the Alma API when
+      # authenticating a user.
+      # @see https://developers.exlibrisgroup.com/alma/apis/docs/users/UE9TVCAvYWxtYXdzL3YxL3VzZXJzL3t1c2VyX2lkfQ==/
+      if (password = params.delete(:password) || params.delete("password")).present?
+        headers["Exl-User-Pw"] = password
+      end
+
       # Finally create and return the Faraday connection object.
       Faraday.new(
         configuration.base_url,
-        params:  default_params.reverse_merge(params),
-        headers: {
-          "Authorization": "apikey #{configuration.api_key}",
-          "Accept":        format,
-          "Content-Type":  format
-        }
+        params:  params,
+        headers: headers
       ) do |faraday|
         faraday.response :raise_error # raise Faraday::Error on status code 4xx or 5xx
       end
