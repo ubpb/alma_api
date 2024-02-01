@@ -72,11 +72,18 @@ module AlmaApi
       parse_response_body(response.body)
     rescue Faraday::Error => e
       handle_faraday_error(e)
+    rescue StandardError
+      raise Error, UNEXPECTED_ERROR_MESSAGE
     end
 
     def handle_faraday_error(error)
+      raise Error, UNEXPECTED_ERROR_MESSAGE if error.response_body.blank?
+
+      # The error response body is either XML, JSON or empty, so we need to parse it
       error_response = parse_error_response_body(error.response_body)
 
+      # Throw our own error based on the error code from the response and/or the
+      # response status.
       case error_response[:error_code]
       when *GATEWAY_ERROR_CODES
         raise GatewayError.new(error_response[:error_message], error_response[:error_code])
@@ -84,8 +91,10 @@ module AlmaApi
         case error.response_status
         when 400..499
           raise LogicalError.new(error_response[:error_message], error_response[:error_code])
-        else
+        when 500..599
           raise ServerError.new(error_response[:error_message], error_response[:error_code])
+        else
+          raise Error, UNEXPECTED_ERROR_MESSAGE
         end
       end
     end

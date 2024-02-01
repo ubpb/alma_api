@@ -229,7 +229,7 @@ module AlmaApi
     end
 
     def test_handle_faraday_error_with_missing_response
-      assert_raises(AlmaApi::ServerError) {
+      assert_raises(AlmaApi::Error) {
         assert_equal(true, @client.send(:handle_faraday_error, Faraday::Error.new))
       }
     end
