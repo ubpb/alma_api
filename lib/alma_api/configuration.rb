@@ -30,7 +30,7 @@ module AlmaApi
 
     def base_url=(value)
       if value.is_a?(Symbol)
-        raise ArgumentError, "Invalid gateway: #{value}" unless GATEWAYS.keys.include?(value.to_sym)
+        raise ArgumentError, "Invalid gateway: #{value}" unless GATEWAYS.keys.include?(value)
 
         @base_url = GATEWAYS[value]
       else
