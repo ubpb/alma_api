@@ -98,6 +98,9 @@ module AlmaApi
       # Finally create and return the Faraday connection object.
       Faraday.new(
         configuration.base_url,
+        request: {
+          timeout: configuration.timeout
+        },
         params:  params,
         headers: headers
       ) do |faraday|

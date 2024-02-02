@@ -83,6 +83,9 @@ The following options are available:
     The default format to use for each request. The client supports `"json"` and `"xml"`. The default is `"json"`.
 4. `language`
     The language used by Alma for error messages and textual information. The default is English (`"en"`). To change this, set this parameter to any 2-letter language code that is supported and enabled in Alma (see the mapping table "Institution Languages" in Alma).
+5. `timeout`
+    The max number of seconds (Integer, Float) to wait for a request to complete. The default is `nil` which uses
+    the default of the underlying Faraday adapter (`Net::HTTP`).
 
 ### Creating a client
 

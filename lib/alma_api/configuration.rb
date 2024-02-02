@@ -16,7 +16,8 @@ module AlmaApi
     attr_reader :api_key,
                 :base_url,
                 :default_format,
-                :language
+                :language,
+                :timeout
 
     def initialize(api_key: nil)
       # Set defaults. Passing nil to the setters will set the default value.
@@ -24,6 +25,7 @@ module AlmaApi
       self.base_url = nil
       self.default_format = nil
       self.language = nil
+      self.timeout = nil
 
       # Yield self to allow block-style configuration.
       yield(self) if block_given?
@@ -51,6 +53,10 @@ module AlmaApi
 
     def language=(value)
       @language = value.presence&.to_s || DEFAULT_LANGUAGE
+    end
+
+    def timeout=(value)
+      @timeout = value.presence
     end
 
   end
