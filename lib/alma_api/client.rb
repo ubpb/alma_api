@@ -17,7 +17,9 @@ module AlmaApi
 
     def get(url, params: {}, format: nil)
       perform_request do
-        connection(format: format, params: params).get(url)
+        connection(format: format, params: params).get(url) do |req|
+          yield(req) if block_given?
+        end
       end
     end
 
@@ -25,6 +27,7 @@ module AlmaApi
       perform_request do
         connection(format: format, params: params).post(url) do |req|
           req.body = body
+          yield(req) if block_given?
         end
       end
     end
@@ -33,13 +36,16 @@ module AlmaApi
       perform_request do
         connection(format: format, params: params).put(url) do |req|
           req.body = body
+          yield(req) if block_given?
         end
       end
     end
 
     def delete(url, params: {}, format: nil)
       perform_request do
-        connection(format: format, params: params).delete(url)
+        connection(format: format, params: params).delete(url) do |req|
+          yield(req) if block_given?
+        end
       end
     end
 

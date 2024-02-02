@@ -238,6 +238,20 @@ end
 
 ```
 
+## Tweaking a request
+
+As stated before this library uses [`faraday`](https://github.com/lostisland/faraday) as the underlying http client. It manages the Faraday connection, sets up the necessary headers and params and performs the requests against Alma.
+
+Therefore there should be no need to tweak a request before sending it to Alma. This should be considered as a bug and we are happy to receive feature requests.
+
+However, there is a way to tweak a request. For `#get`, `#post`, `#put` and `#delete` you can open a block that gives you access to the [`Faraday::Request`](https://www.rubydoc.info/github/lostisland/faraday/Faraday/Request) instance.
+
+```ruby
+client.get("some/path") do |req|
+  req.headers["foo"] = "bar"
+end
+```
+
 ## Upgrading
 
 ### From 1.x to 2.x
