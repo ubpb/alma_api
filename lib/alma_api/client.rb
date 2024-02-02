@@ -89,10 +89,10 @@ module AlmaApi
 
       # If the params contains a password parameter, delete that from the params
       # and add it to the headers. This is a special case for the Alma API when
-      # authenticating a user.
+      # authenticating a user. The password must be url-encoded.
       # @see https://developers.exlibrisgroup.com/alma/apis/docs/users/UE9TVCAvYWxtYXdzL3YxL3VzZXJzL3t1c2VyX2lkfQ==/
       if (password = params.delete(:password) || params.delete("password")).present?
-        headers["Exl-User-Pw"] = password
+        headers["Exl-User-Pw"] = CGI.escape(password)
       end
 
       # Finally create and return the Faraday connection object.
