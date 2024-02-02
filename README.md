@@ -262,3 +262,4 @@ end
 * `AlmaApi.configure` is deprecated. Use `AlmaApi::Client.configure` instead.
 * All errors that get raised during a request result in an `AlmaApi::Error`. Use `#cause` to get the causing error.
 * `AlmaApi::Client#remaining_api_calls` performs a request to read the value from Alma.
+* `AlmaApi::Configuration` can be used to set a request timeout.
