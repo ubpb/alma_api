@@ -82,9 +82,9 @@ module AlmaApi
 
       # Setup the headers for the request.
       headers = {
-        "Authorization": "apikey #{configuration.api_key}",
-        "Accept":        format,
-        "Content-Type":  format
+        "Authorization" => "apikey #{configuration.api_key}",
+        "Accept"        => format,
+        "Content-Type"  => format
       }
 
       # If the params contains a password parameter, delete that from the params
