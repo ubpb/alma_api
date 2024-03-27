@@ -326,5 +326,9 @@ module AlmaApi
       end
     end
 
+    def test_exl_user_password_is_url_encoded
+      connection = @client.send(:connection, params: {password: "test %20"})
+      assert_equal("test%20%2520", connection.headers["Exl-User-Pw"])
+    end
   end
 end
