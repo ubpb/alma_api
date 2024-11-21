@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    alma_api (2.0.2)
-      activesupport (> 6, < 8)
+    alma_api (2.0.3)
+      activesupport (> 6)
       faraday (~> 2.7)
       hashie (~> 5.0)
       nokogiri (~> 1.11)

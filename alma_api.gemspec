@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files lib README.md LICENSE alma_api.gemspec`.split($INPUT_RECORD_SEPARATOR)
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activesupport", "> 6", "< 8"
+  spec.add_dependency "activesupport", "> 6"
   spec.add_dependency "faraday", "~> 2.7"
   spec.add_dependency "hashie", "~> 5.0"
   spec.add_dependency "nokogiri", "~> 1.11"
